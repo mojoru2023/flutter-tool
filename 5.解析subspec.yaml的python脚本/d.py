@@ -17,10 +17,20 @@ def process_pubspec(file_path):
         try:
             # 读取 YAML 文件内容
             pubspec_content = yaml.safe_load(file)
-
+            
+            if pubspec_content is None:
+                print(f"Warning: {file_path} is empty or not a valid YAML file.")
+                return
+            
             project_name = pubspec_content.get('name', 'Unnamed Project')
             dependencies = pubspec_content.get('dependencies', {})
             dev_dependencies = pubspec_content.get('dev_dependencies', {})
+
+            # 确保依赖项是字典
+            if not isinstance(dependencies, dict):
+                dependencies = {}
+            if not isinstance(dev_dependencies, dict):
+                dev_dependencies = {}
 
             # 写入项目信息到输出文件
             with open(output_file, 'a', encoding='utf-8') as output:
